@@ -91,7 +91,7 @@ void autoFantastico() {
       disp_binary(output);
       output = output >> 1;
       if (delay(0) == 0) {
-        turnOff();
+        // turnOff();
         return;
       }
     }
@@ -153,22 +153,23 @@ bool keyHit(int index) {
   oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
   fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
   ch = getchar();
-  if (ch == 27) {          // ESC
-    int next1 = getchar(); // should be '['
-    int next2 = getchar(); // 'A' = up, 'B' = down
-    if (next1 == '[') {
-      if (next2 == 'A') { // Arrow Up
-        if (delayTime > 2000) {
-          delayTime -= 2000;
-        }
-      } else if (next2 == 'B') { // Arrow Down
-        delayTime += 2000;
-      }
+  if (ch == 117) { // ASCII para u
+    if (delayTime > 1000) {
+      delayTime = delayTime - 1000;
     }
   }
+
+  if (ch == 100) { // ASCII para d
+    delayTime = delayTime + 1000;
+  }
   restoreTerminalConfig(oldattr);
+
   fcntl(STDIN_FILENO, F_SETFL, oldf);
-  return false;
+  if (ch == 27) {
+    ungetc(ch, stdin);
+    return 1;
+  }
+  return 0;
 }
 
 void pinSetup(void) {

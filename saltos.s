@@ -21,12 +21,12 @@ BL ledShow        // ledShow(R5)
 MOV R0, #2
 BL delay
 
-SUBS R6, R6, #1
-BEQ reset
+SUBS R6, R6, #1 // R6 -= 1;
+BEQ reset       // if R6 == 0 reset;
 
-CMP R0, #0
-BNE loop
-BL turnOff
+CMP R0, #0   // if R0 != 0
+BNE loop     // goto loop
+BL turnOff   // else call turnOff()
 
 POP {R4, R5, R6, PC}
 
